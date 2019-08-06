@@ -8,6 +8,7 @@ import { LoggingInterceptor } from '../../core/inteceptors/logging.interceptor';
 import { TransformInterceptor } from '../../core/interceptors/transform.interceptor';
 import { ErrorInterceptor } from '../../core/interceptors/error.interceptor';
 import { User } from '../../core/decorators/user.decorator';
+import { DemoPipe } from '../../core/pipes/demo.pipe';
 
 
 @Controller('posts')
@@ -27,7 +28,7 @@ export class PostsController {
     }
  
     @Get(':id')
-    show(@Param('id',ParseIntPipe) id){
+    show(@Param('id',ParseIntPipe,DemoPipe) id){
         console.log(id,typeof id)
         return {
             title:`Post ${id}`
@@ -39,7 +40,7 @@ export class PostsController {
     @UsePipes(ValidationPipe)
     // @SetMetadata('roles',['member'])
     @Roles('member')
-    store(@Body() post:CreatePostDto,@User('demo') user){
+    store(@Body(DemoPipe) post:CreatePostDto,@User('demo') user){
         console.log(user)
         this.demoServices.create(post)
         console.log(post.title)
