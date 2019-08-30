@@ -21,8 +21,12 @@ export class PostService {
         return entities;
     }
 
-    async show(id:string){
+    async show(id: string) {
         const entity = await this.postRepository.findOne(id);
         return entity;
+    }
+
+    async update(id: string, data) {
+        const result = await this.postRepository.update(id, data)
     }
 }
