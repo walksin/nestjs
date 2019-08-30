@@ -1,5 +1,6 @@
-import { Controller, Body, Post } from '@nestjs/common';
+import { Controller, Body, Post, Get } from '@nestjs/common';
 import { PostService } from './post.service';
+import { async } from 'rxjs/internal/scheduler/async';
 
 
 @Controller('posts')
@@ -12,4 +13,11 @@ export class PostController {
     async store(@Body() data){
         return await this.postService.store(data)
     }
+
+    @Get()
+    async index(){
+        return await this.postService.index()
+    }
+
+
 }
