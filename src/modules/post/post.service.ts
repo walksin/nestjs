@@ -29,4 +29,8 @@ export class PostService {
     async update(id: string, data) {
         const result = await this.postRepository.update(id, data)
     }
+
+    async destroy(id:string){
+        const result = await this.postRepository.delete(id)
+    }
 }
