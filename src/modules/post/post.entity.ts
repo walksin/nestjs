@@ -1,4 +1,4 @@
-import{ Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
 @Entity()
 export class Post {
@@ -8,7 +8,7 @@ export class Post {
     @Column()
     title: string;
 
-    @Column('longtext')
+    @Column('longtext', { nullable: true })
     body: string
 
     @CreateDateColumn()
