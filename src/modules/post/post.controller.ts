@@ -40,7 +40,8 @@ export class PostController {
     }
 
     @Post(':id/vote')
-    async vote(@Param('id', ParseIntPipe) id: number) {
-        console.log(typeof id)
+    @UseGuards(AuthGuard('jwt'))
+    async vote(@Param('id', ParseIntPipe) id: number, @User() user: UserEntity) {
+        return await this.postService.vote(id, user);
     }
 }

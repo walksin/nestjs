@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './post.entity';
@@ -12,7 +12,7 @@ export class PostService {
         private readonly postRepository: Repository<Post>
     ) { }
 
-    async store(data:PostDto,user:User) {
+    async store(data: PostDto, user: User) {
         const entity = await this.postRepository.create(data);
         await this.postRepository.save({
             ...entity,
@@ -23,7 +23,7 @@ export class PostService {
 
     async index() {
         const entities = await this.postRepository.find({
-            relations:['user']
+            relations: ['user']
         });
         return entities;
     }
@@ -33,11 +33,23 @@ export class PostService {
         return entity;
     }
 
-    async update(id: string, data:Partial<PostDto>) {
+    async update(id: string, data: Partial<PostDto>) {
         const result = await this.postRepository.update(id, data)
     }
 
-    async destroy(id:string){
+    async destroy(id: string) {
         const result = await this.postRepository.delete(id)
+    }
+
+    async vote(id: number, user: User) {
+        const entity = await this.postRepository.findOne(id);
+        if (!entity) {
+            throw new BadRequestException('post is not existed');
+        }
+
+        await this.postRepository.createQueryBuilder()
+            .relation(User, 'votes')
+            .of(user)
+            .add(id);
     }
 }
