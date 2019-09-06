@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, ManyToMany } from 'typeorm'
 import { User } from '../user/user.entity';
+import { type } from 'os';
 
 @Entity()
 export class Post {
@@ -17,8 +18,11 @@ export class Post {
 
     @UpdateDateColumn()
     updated: Date;
-    
-    @ManyToOne( type => User,user => user.posts)
-    user:User
+
+    @ManyToOne(type => User, user => user.posts)
+    user: User
+
+    @ManyToMany(type => User, user => user.votes)
+    liked: User
 
 }

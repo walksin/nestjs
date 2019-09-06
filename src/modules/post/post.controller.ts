@@ -1,4 +1,4 @@
-import { Controller, Body, Post, Get, Param, Put, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
+import { Controller, Body, Post, Get, Param, Put, Delete, UseGuards, ParseIntPipe, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { PostService } from './post.service';
 import { async } from 'rxjs/internal/scheduler/async';
 import { PostDto } from './post.dto';
@@ -49,5 +49,11 @@ export class PostController {
     @UseGuards(AuthGuard('jwt'))
     async unvote(@Param('id', ParseIntPipe) id: number, @User() user: UserEntity) {
         return await this.postService.unvote(id, user);
+    }
+
+    @Get(':id/liked')
+    @UseInterceptors(ClassSerializerInterceptor)
+    async liked(@Param('id', ParseIntPipe) id: number) {
+        return await this.postService.liked(id);
     }
 }

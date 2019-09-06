@@ -22,12 +22,12 @@ export class User {
     @UpdateDateColumn()
     updated: Date;
 
-    @OneToMany(type => Post,post => post.user)
-    posts:Post[]
+    @OneToMany(type => Post, post => post.user)
+    posts: Post[]
 
-    @ManyToMany(type => Post)
+    @ManyToMany(type => Post, post => post.liked)
     @JoinTable()
-    votes:Post[]
+    votes: Post[]
 
     @BeforeInsert()
     @BeforeUpdate()
