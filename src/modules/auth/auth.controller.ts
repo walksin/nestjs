@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './auth.dto';
 import { async } from 'rxjs/internal/scheduler/async';
 import { AuthGuard } from '@nestjs/passport';
+import { User } from '../../core/decorators/user.decorator';
+
 
 
 @Controller('auth')
@@ -19,8 +21,8 @@ export class AuthController {
 
     @Get('test')
     @UseGuards (AuthGuard())
-    async authTest(@Req() req){
-        console.log('user',req.user)
+    async authTest(@User() user){
+        console.log('user',user)
         return {
             message:'ok'
         }
