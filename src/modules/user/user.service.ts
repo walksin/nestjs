@@ -38,10 +38,14 @@ export class UserService {
             throw new NotFoundException('user not found');
         }
         const pass = await entity.comparePassword(password);
-        if(!pass){
+        if (!pass) {
             throw new BadRequestException('password verify failed')
         }
         entity.password = newPassword;
         return await this.userRepository.save(entity)
+    }
+
+    async findByName(name: string) {
+        return await this.userRepository.findOne({ name });
     }
 }
