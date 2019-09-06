@@ -52,4 +52,16 @@ export class PostService {
             .of(user)
             .add(id);
     }
+
+    async unvote(id: number, user: User) {
+        const entity = await this.postRepository.findOne(id);
+        if (!entity) {
+            throw new BadRequestException('post is not existed');
+        }
+
+        await this.postRepository.createQueryBuilder()
+            .relation(User, 'votes')
+            .of(user)
+            .remove({id});
+    }
 }
