@@ -1,4 +1,4 @@
-import { Controller, Body, Post, Get, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Body, Post, Get, Param, Put, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { PostService } from './post.service';
 import { async } from 'rxjs/internal/scheduler/async';
 import { PostDto } from './post.dto';
@@ -37,5 +37,10 @@ export class PostController {
     @Delete(':id')
     async destroy(@Param('id') id: string) {
         return await this.postService.destroy(id)
+    }
+
+    @Post(':id/vote')
+    async vote(@Param('id', ParseIntPipe) id: number) {
+        console.log(typeof id)
     }
 }
