@@ -1,4 +1,4 @@
-import { Controller, Body, Post, UseInterceptors, ClassSerializerInterceptor, Get, UseGuards } from '@nestjs/common';
+import { Controller, Body, Post, UseInterceptors, ClassSerializerInterceptor, Get, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './auth.dto';
 import { async } from 'rxjs/internal/scheduler/async';
@@ -19,7 +19,8 @@ export class AuthController {
 
     @Get('test')
     @UseGuards (AuthGuard())
-    async authTest(){
+    async authTest(@Req() req){
+        console.log('user',req.user)
         return {
             message:'ok'
         }
