@@ -1,7 +1,10 @@
-import { Controller, Body, Post, Get, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Body, Post, Get, Param, Put, Delete, UseGuards, ParseIntPipe, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { PostService } from './post.service';
 import { async } from 'rxjs/internal/scheduler/async';
 import { PostDto } from './post.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { User as UserEntity } from '../user/user.entity';
+import { User } from '../../core/decorators/user.decorator';
 
 
 @Controller('posts')
@@ -11,8 +14,9 @@ export class PostController {
     ) { }
 
     @Post()
-    async store(@Body() data: PostDto) {
-        return await this.postService.store(data)
+    @UseGuards(AuthGuard('jwt'))
+    async store(@Body() data: PostDto, @User() user: UserEntity) {
+        return await this.postService.store(data, user)
     }
 
     @Get()
@@ -33,5 +37,23 @@ export class PostController {
     @Delete(':id')
     async destroy(@Param('id') id: string) {
         return await this.postService.destroy(id)
+    }
+
+    @Post(':id/vote')
+    @UseGuards(AuthGuard('jwt'))
+    async vote(@Param('id', ParseIntPipe) id: number, @User() user: UserEntity) {
+        return await this.postService.vote(id, user);
+    }
+
+    @Delete(':id/vote')
+    @UseGuards(AuthGuard('jwt'))
+    async unvote(@Param('id', ParseIntPipe) id: number, @User() user: UserEntity) {
+        return await this.postService.unvote(id, user);
+    }
+
+    @Get(':id/liked')
+    @UseInterceptors(ClassSerializerInterceptor)
+    async liked(@Param('id', ParseIntPipe) id: number) {
+        return await this.postService.liked(id);
     }
 }
